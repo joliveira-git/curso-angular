@@ -90,7 +90,7 @@ Obs: lembrar de declarar no providers do módulo
 
 # Binding
 # Interpolação 
-  <Componente> => <Template>
+  <<Componente>> => <Template>
   ```
   {{ valor }}
   ```
