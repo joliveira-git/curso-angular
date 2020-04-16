@@ -5,7 +5,9 @@ Principais Tecnologias:
 npm: Gerenciador de pacotes do Node
 
 - TypeScript
+'''
   sudo npm install -g typescript
+'''  
   ECMAScript 5 >> ECMAScript 6 (2015) >> TypeScript
 .ts >> transpiler >> .js
 
