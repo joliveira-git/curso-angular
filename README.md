@@ -1,20 +1,20 @@
-#Resumão do Curso de Angular
+# Resumão do Curso de Angular
 
 Principais Tecnologias:
 - Node.js (V8 engine Chrome)
 npm: Gerenciador de pacotes do Node
 
 - TypeScript
-sudo npm install -g typescript
-ECMAScript 5 >> ECMAScript 6 (2015) >> TypeScript
+  sudo npm install -g typescript
+  ECMAScript 5 >> ECMAScript 6 (2015) >> TypeScript
 .ts >> transpiler >> .js
 
 - Angular CLI
-sudo npm install -g angular-cli
-sudo npm install -g @angular/cli
+  sudo npm install -g angular-cli
+  sudo npm install -g @angular/cli
 
 - Bootstrap (framework css)
-npm intall ng2-bootstrap bootstrap --save
+  npm intall ng2-bootstrap bootstrap --save
 
 Editores:
 VS Code
@@ -23,50 +23,50 @@ Atom
 Sublime
 
 - Para criar novo projeto:
-ng new nome-projeto
+  ng new nome-projeto
 
 package.json: dependências e scripts
 
 # Componente (@Component)
-ng g c nome-componente
+  ng g c nome-componente
 
 exemplo de .ts:
-@Component({
-  selector: 'app-roo',
-  templateUrl: './app.component.html',
-  stylesUrls: [./app/component.css']
-  })
- export class AppComponent{
-  title = 'Olá'
- }
+  @Component({
+    selector: 'app-roo',
+    templateUrl: './app.component.html',
+    stylesUrls: [./app/component.css']
+    })
+   export class AppComponent{
+    title = 'Olá'
+   }
 
 exemplo de .html
-'<h1>{{title}}</h1>'
+  '<h1>{{title}}</h1>'
 
 Template Literals:
-template: `<p> meu texto aqui</p>`
+  template: `<p> meu texto aqui</p>`
 
 - Para executar:
-ng serve
-Porta padrão: 4200
+  ng serve
+  Porta padrão: 4200
 
 # Módulo (@NgModule)
-ng g m nome-modulo
+  ng g m nome-modulo
 exemplo de .ts:
-@NgModule({
-  declarations:[//declarar componentes, diretivas e pipes aqui...],
-  imports:[//importar outros módulos aqui ...],
-  providers:[//prover os serviços aqui... ],
-  bootstrap: [//colocar o componente raiz aqui ...]
-  })
+  @NgModule({
+    declarations:[//declarar componentes, diretivas e pipes aqui...],
+    imports:[//importar outros módulos aqui ...],
+    providers:[//prover os serviços aqui... ],
+    bootstrap: [//colocar o componente raiz aqui ...]
+    })
   
 # Serviço (@Injectable)
-ng g s dir/nome-service
+  ng g s dir/nome-service
 
 injeção de dependência: declarar no construtor
 exemplo: 
-constructor (meuService: MeuService){
-}
+  constructor (meuService: MeuService){
+  }
 
 Obs: lembrar de declarar no providers do módulo
 
