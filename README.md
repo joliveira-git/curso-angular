@@ -2,9 +2,12 @@
 
 Principais Tecnologias:
 - Node.js (V8 engine Chrome)
-npm: Gerenciador de pacotes do Node
-
 - TypeScript
+- Jamine / Karma
+- Protractor
+
+
+npm: Gerenciador de pacotes do Node
 ```
   sudo npm install -g typescript
 ```  
@@ -261,10 +264,10 @@ Acesso ao DOM e ao template.
   ng lint
   ...
   
-  - Testes
-  Testes Unitários:
-  Jasmine: Ferramenta BDD (testes orientados a comportamento). São gerados arquivos .spec.ts
-  Karma: É um test runner. Ele automatiza os testes em diversos navegadores web com um único comando. O arquivo tests.ts é            usado para configurar como serão realizados os testes.
+# Testes
+  Testes Unitários com Jasmine / Karma:
+  - Jasmine: Ferramenta BDD (testes orientados a comportamento). São gerados arquivos .spec.ts
+  - Karma: É um test runner. Ele automatiza os testes em diversos navegadores web com um único comando. O arquivo tests.ts é            usado para configurar como serão realizados os testes.
   ...
   ng test
   ...
@@ -308,10 +311,66 @@ Acesso ao DOM e ao template.
   });
   ...
   
-  e2e: End to End com Protractor
+  Testes de Integração (e2e: end to end) com Protractor / Karma
+  ...
+  npm e2e
+  ...
+  exemplo de teste de integração:  
+  ...
+  import { AngularNgrx4ExamplePage } from './app.po';
+
+  describe('angular-ngrx4-example App', () => {
+    let page: AngularNgrx4ExamplePage;
+
+    beforeEach(() => {
+      page = new AngularNgrx4ExamplePage();
+    });
+
+    it('should display welcome message', () => {
+      page.navigateTo();
+      expect(page.getParagraphText()).toEqual('Welcome to app!');
+    });
+  });
+  ...
+  
+# Build
+Build de dev:
+...
+  ng build --target=development --environment=dev
+  ng build --dev --e=dev
+  ng build --dev
+  ng build
+  ...
+O build de dev não é ofuscado e nem minimizado.
+
+O build é gerado na pasta dist. São gerados os seguintes arquivos:
+  index.html
+  inline.js +
+  inline.map
+  main.bundle.js + todo o código fonte da aplicação templates html e css
+  main.map
+  polyfills.bundle.js + código auxiliar que ajuda o browser a renderizar
+  polyfills.map  
+  ...
+  
+  Build de prod:
+  No build de produção os arquivos são minificados e ofuscados. O nome do arquivo main.bundle.js e polyfills.bundle.js é acrescido de um código para evitar problemas com o cache da aplicação
+  No index html é adicionado um import para inline e polyfills e bundle
+  ...
+  ng build --target=production --environment=prod
+  ng build --prod --env=prod
+  ng build --prod
+  ...
+  
+  O Node.js possui um servidor http que pode ser usado para testar a aplicação
+  ...
+  npm install http-server -g
+  ...
+  Para testar a aplicação é necessário entrar no diretório dist e rodar o comando http-server.
+  Vantagem: Não precisa instalar servidor apache para testar código simples
+  
+  Na aba network do browser é possível observar os arquivos que são carregados
 
   
-  ...
+ 
 
-  ...
-  
