@@ -73,9 +73,15 @@ exemplo de .ts:
     declarations:[//declarar componentes, diretivas e pipes aqui...],
     imports:[//importar outros módulos aqui ...],
     providers:[//prover os serviços aqui... ],
-    bootstrap: [//colocar o componente raiz aqui ...]
+    bootstrap: [//colocar o componente raiz* aqui ...],
+    exports: [//componentes, diretivas e pipes que serão exportados (expostos)...]}
     })
+    *Componente raiz: container da aplicação, onde se declara as rotas, declarar ou chamar o menu da aplicação, ou seja o view port da aplicação
 ```  
+Alguns módulos importantes:
+BrowserModule: prepara a aplicação para ser executada em um browser
+FormsModule diretiva ngModule
+HttpModule requisições Ajax
 # Serviço (@Injectable)
 ```
   ng g s dir/nome-service
@@ -90,16 +96,16 @@ Obs: lembrar de declarar no providers do módulo
 
 # Binding
 # Interpolação 
-  <<Componente>> => <Template>
+  Componente => Template
   ```
-  {{ valor }}
+    {{ valor }}
   ```
   É possível executar expressões dentro da interpolação. Ex.: {{ 1 + 1 + getValor() }}
   
 # Property Binding
-  <Componente> => <Template>
+  Componente => Template
   ```
-  [propriedade]="valor"
+    [propriedade]="valor"
   ```
   Ex.:
   ```
@@ -110,13 +116,15 @@ Obs: lembrar de declarar no providers do módulo
   Quando não existe uma propriedade no elemento usa-se attr. Ex.: [attr.colspan]
 
 # Event Bindind
-  <Template> => <Componente>
+  Template => Componente
   ```
-  (evento)="handler"
+    (evento)="handler"
   ```
   Ex.: 
   ```
-  (keyup)="onKeyUp($event)"
+    (keyup)="onKeyUp($event)"
+    ou
+    on-keyup="onKeyUp($event)"
   ```
   implementar o código de onKeyUp no .ts
   o valor do elemento pode ser obtido de: $event.target.value
@@ -124,9 +132,22 @@ Obs: lembrar de declarar no providers do módulo
   Referência principais eventos: https://developer.mozilla.org/pt-BR/docs/Web/Events
 
 # Two-Way Data Binding    
-  <Componente> <=> <Template>
+  Componente <=> Template
   ```
   [(ngModel)]="propriedade"
+  
+  ```
+  Exemplo utilizando property binding e event binding
+  ```
+  <input type="text" 
+    [ngModel]="nome"
+    (ngModelChange)="nome = $event"  //pode-se fazer a atribuição sem necessitar de uma função
+  ```
+  Exemplo two-way data binding:
+  ```
+  <input type="text" [(ngModel)]="nome">
+  ou
+  <input type="text" bindon-ngModel="nome">
   ```
   
 # Property Binding: Class Binding
@@ -145,3 +166,29 @@ Obs: lembrar de declarar no providers do módulo
     * aplica o estilo diplay:block no elemento HTML (div), se a condição classe.value == 'alert-danger' for verdadeira      
 ```    
     
+# Input Properties
+
+  ``` 
+  no .ts do componente filho:
+  @Input('nome') nomeCurso: String = '';
+  
+  no html do componente pai:
+  <meu-componente [nome]="meu nome"></meu-componente>
+  
+  ``` 
+  Obs: Pode-se declarar no metadado inputs da anotação @Component.
+  
+  # Output Properties
+  ``` 
+  no .ts do componente filho:
+  @Input() valor: number = 0;
+  
+  @Output() mudouValor = new EventEmitter();
+  
+  incrementa(){
+    this.valor++;
+    this.mudouValor.emit({novoValor: this.valor});
+  }
+  no html do componente pai:
+  <meu-component [valor]="valorInicial" mudouValor="onMudouValor($event)"><meu-componente>
+  ``` 
