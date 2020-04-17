@@ -231,7 +231,7 @@ Acesso ao DOM e ao template.
   
 # Angular CLI
   Comandos para a criação de projetos:
-  ...
+  ```  
   node -v
   sudo npm install -g anulaar-cli
   ng new nome-projeto
@@ -240,39 +240,39 @@ Acesso ao DOM e ao template.
   
   cd diretorio
   ng init (cria projeto angular em um diretório já existente)
-   ...
+   ```  
     
   - Pré processadores CSS
   Em um novo projeto:
-  ...
+  ```  
   ng new nome-projeto --style=sass
   ng new nome-projeto --style=less
   ng new nome-projeto --style=stylus
-  ...
+  ```  
   
   Em um projeto existente:
-  ...
+  ```  
   ng set defaults.styleExt scss
   ng set defaults.styleExt less
   ng set defaults.styleExt styl
-  ...
+  ```  
     
   - Lint: escanea o código procurando pequenos erros e verifica as boas práticas do style guide
   jslint
   
-  ...
+  ```  
   ng lint
-  ...
+  ```  
   
 # Testes
   Testes Unitários com Jasmine / Karma:
   - Jasmine: Ferramenta BDD (testes orientados a comportamento). São gerados arquivos .spec.ts
   - Karma: É um test runner. Ele automatiza os testes em diversos navegadores web com um único comando. O arquivo tests.ts é            usado para configurar como serão realizados os testes.
-  ...
+  ```  
   ng test
-  ...
+  ```  
   exemplo de teste unitário escrito em typescript e Jasmine:
-  ...
+  ```  
   import { TestBed, async } from '@angular/core/testing';
   import { RouterTestingModule } from '@angular/router/testing';
 
@@ -309,14 +309,14 @@ Acesso ao DOM e ao template.
       expect(compiled.querySelector('h1').textContent).toContain('Welcome to app!');
     }));
   });
-  ...
+  ```  
   
   Testes de Integração (e2e: end to end) com Protractor / Karma
-  ...
+  ```  
   npm e2e
-  ...
+  ```  
   exemplo de teste de integração:  
-  ...
+  ```  
   import { AngularNgrx4ExamplePage } from './app.po';
 
   describe('angular-ngrx4-example App', () => {
@@ -331,16 +331,16 @@ Acesso ao DOM e ao template.
       expect(page.getParagraphText()).toEqual('Welcome to app!');
     });
   });
-  ...
+  ```  
   
 # Build
 Build de dev:
-...
+  ```  
   ng build --target=development --environment=dev
   ng build --dev --e=dev
   ng build --dev
   ng build
-  ...
+  ```  
 O build de dev não é ofuscado e nem minimizado.
 
 O build é gerado na pasta dist. São gerados os seguintes arquivos:
@@ -350,22 +350,21 @@ O build é gerado na pasta dist. São gerados os seguintes arquivos:
   main.bundle.js + todo o código fonte da aplicação templates html e css
   main.map
   polyfills.bundle.js + código auxiliar que ajuda o browser a renderizar
-  polyfills.map  
-  ...
+  polyfills.map    
   
-  Build de prod:
+Build de prod:
   No build de produção os arquivos são minificados e ofuscados. O nome do arquivo main.bundle.js e polyfills.bundle.js é acrescido de um código para evitar problemas com o cache da aplicação
   No index html é adicionado um import para inline e polyfills e bundle
-  ...
+  ```  
   ng build --target=production --environment=prod
   ng build --prod --env=prod
   ng build --prod
-  ...
+  ```  
   
   O Node.js possui um servidor http que pode ser usado para testar a aplicação
-  ...
+  ```  
   npm install http-server -g
-  ...
+  ```  
   Para testar a aplicação é necessário entrar no diretório dist e rodar o comando http-server.
   Vantagem: Não precisa instalar servidor apache para testar código simples
   
