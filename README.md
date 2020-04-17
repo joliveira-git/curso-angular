@@ -192,3 +192,17 @@ Obs: lembrar de declarar no providers do módulo
   no html do componente pai:
   <meu-component [valor]="valorInicial" mudouValor="onMudouValor($event)"><meu-componente>
   ``` 
+# Life-Cycle do Componente (Hooks)
+>> ngOnChanges: antes do ngOnInit e quando o valor do property binding é atualizado
+
+>> ngOnInit: quando o componente é inicializado
+
+>> ngDoCheck: a cada ciclo de verificação de mudanças
+
+>> ngAfterContentInit: depois de inserir conteúdo na view
+
+>> ngAfterContectChecked: a cada verificação de conteúdo inserido
+
+>> ngAfterViewChecked: a cada verificação de conteúdo / conteúdo filho
+
+>> ngOnDestroy: antes da diretiva / component ser destruído
