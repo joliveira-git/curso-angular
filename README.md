@@ -371,5 +371,20 @@ Build de prod:
   Na aba network do browser é possível observar os arquivos que são carregados
 
   
+ # Instalar bibliotecas externas
+ Instalação do bootstrap
+ ```  
+ npm install --save boostrap@next
+ ```  
+ Incluir dependências: jquery e tether (faz meio de campo entre jquery e boostrap)
+ No arquivo angular-cli.json os imports deverão ser colocados na sessão styles e scripts, evitando assim, poluir o index.html
+ olhar documentação do angular-cli no github: https://github/angular/angular-cli
+
+Instalação do lodash
+ ```  
+ npm install --save lodash
+ ```  
+ 
+ 
  
 
