@@ -193,7 +193,7 @@ Obs: lembrar de declarar no providers do módulo
   <meu-component [valor]="valorInicial" mudouValor="onMudouValor($event)"><meu-componente>
   ``` 
 # Life-Cycle do Componente (Hooks)
->> ngOnChanges: antes do ngOnInit e quando o valor do property binding é atualizado
+>> ngOnChanges: antes do ngOnInit e quando o valor do input property é atualizado.
 
 >> ngOnInit: quando o componente é inicializado
 
@@ -206,3 +206,22 @@ Obs: lembrar de declarar no providers do módulo
 >> ngAfterViewChecked: a cada verificação de conteúdo / conteúdo filho
 
 >> ngOnDestroy: antes da diretiva / component ser destruído
+
+# ViewChild
+Acesso ao DOM e ao template.
+
+  .html
+  ``` 
+  <input type="text [value]="valor">
+  trocar por:
+  <input type="text #campoInput>
+  ``` 
+  .ts
+  HTMLElement possui vários tipos, por isso é bom exibir o conteúdo no console para definir qual é o tipo exato que deve ser utilizado
+  ``` 
+  @ViewChild('CampoInput') campoValorInput: HTMLElement
+  ou o tipo específico
+  @ViewChild('CampoInput') campoValorInput: ElementRef
+  ...
+  this.campoValorInput.nativeElement.value++;
+  ``` 
