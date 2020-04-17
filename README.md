@@ -225,3 +225,93 @@ Acesso ao DOM e ao template.
   ...
   this.campoValorInput.nativeElement.value++;
   ``` 
+  
+# Angular CLI
+  Comandos para a criação de projetos:
+  ...
+  node -v
+  sudo npm install -g anulaar-cli
+  ng new nome-projeto
+  ng serve
+  localhost:4200
+  
+  cd diretorio
+  ng init (cria projeto angular em um diretório já existente)
+   ...
+    
+  - Pré processadores CSS
+  Em um novo projeto:
+  ...
+  ng new nome-projeto --style=sass
+  ng new nome-projeto --style=less
+  ng new nome-projeto --style=stylus
+  ...
+  
+  Em um projeto existente:
+  ...
+  ng set defaults.styleExt scss
+  ng set defaults.styleExt less
+  ng set defaults.styleExt styl
+  ...
+    
+  - Lint: escanea o código procurando pequenos erros e verifica as boas práticas do style guide
+  jslint
+  
+  ...
+  ng lint
+  ...
+  
+  - Testes
+  Testes Unitários:
+  Jasmine: Ferramenta BDD (testes orientados a comportamento). São gerados arquivos .spec.ts
+  Karma: É um test runner. Ele automatiza os testes em diversos navegadores web com um único comando. O arquivo tests.ts é            usado para configurar como serão realizados os testes.
+  ...
+  ng test
+  ...
+  exemplo de teste unitário escrito em typescript e Jasmine:
+  ...
+  import { TestBed, async } from '@angular/core/testing';
+  import { RouterTestingModule } from '@angular/router/testing';
+
+  import { AppComponent } from './app.component';
+
+  describe('AppComponent', () => {
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          RouterTestingModule
+        ],
+        declarations: [
+          AppComponent
+        ],
+      }).compileComponents();
+    }));
+
+    it('should create the app', async(() => {
+      const fixture = TestBed.createComponent(AppComponent);
+      const app = fixture.debugElement.componentInstance;
+      expect(app).toBeTruthy();
+    }));
+
+    it(`should have as title 'app'`, async(() => {
+      const fixture = TestBed.createComponent(AppComponent);
+      const app = fixture.debugElement.componentInstance;
+      expect(app.title).toEqual('app');
+    }));
+
+    it('should render title in a h1 tag', async(() => {
+      const fixture = TestBed.createComponent(AppComponent);
+      fixture.detectChanges();
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.querySelector('h1').textContent).toContain('Welcome to app!');
+    }));
+  });
+  ...
+  
+  e2e: End to End com Protractor
+
+  
+  ...
+
+  ...
+  
