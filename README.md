@@ -156,7 +156,7 @@ Obs: lembrar de declarar no providers do módulo
 # Property Binding: Class Binding
   Exemplo:
   ```
-    <div class="alert" rolte="alert" 
+    <div class="alert" role="alert" 
       [class.alert-success]="classe.value == 'alert-success'">
   ```      
     * aplica a classe alert-success quando a condição classe.value == 'alert-success for verdadeira  
@@ -460,3 +460,56 @@ Exemplo:
     <div>Listar aqui...</div>
 </template>
 ```      
+
+# Diretiva ngClass
+  ```  
+  <h1>
+      <i class="glyphicon"
+         [ngClass]="{
+              'glyphicon-star-empty': !condicao,
+              'gyphicon-star': condicao
+         }"
+         (click)="onClick()"
+      >
+      </i>
+  </h1>
+  ```  
+
+# Diretiva ngStyle
+  ```  
+  <button
+      [ngStyle]="{
+          'backgroundColor': ativo ? 'blue' : 'gray',
+          'color': ativo ? 'white' : 'black',
+          'fontWhegth': 'ativo ? 'bold' : 'normal'
+          'fontSize': tamanhoFonte + 'px'    
+      }"
+  </button>
+  ```  
+# Operador Elvis ( ? )
+  ```  
+  de:
+    <p> Responsável: {{ tarefa.responsavel != null ? tarefa.responsabel.nome : ''}} </p>
+  para:
+    <p> Responsável: {{ tarefa.responsavel?.nome}} </p>
+  ```  
+# ng-content
+  Exemplo de transclusão:
+
+    ```  
+    componente filho: painel-component
+    <div class="panel panel-defaul">
+        <div class="panel-heading">
+            <ng-content select=".titulo"></ng-content>
+        </div>
+        <div class="panel-body">
+            <ng-content select=".corpo"></ng-content>
+        </div>
+    </div>
+
+    componente pai: app-component
+    <painel-component>
+        <div class="titulo">Título do Painel</div>
+        <div class="corpo">Corpo</div>
+    </painel-component>
+    ```  
