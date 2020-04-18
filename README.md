@@ -513,3 +513,45 @@ Exemplo:
         <div class="corpo">Corpo</div>
     </painel-component>
     ```  
+# Exemplo de Criação de uma Diretiva de Atributo utilizando ElementRef e Renderer
+  Diretivas: 
+    - possuem apenas o aquivo .ts
+    - em geral ficam no diretório shared
+  ```  
+  ng g d
+  ```  
+
+  Diretiva: fundo-amarelo.directive.ts
+  * Atentar ao detalhe do uso dos colchetes no nome da diretiva
+  ```  
+    @Directive({
+        selector: '[fundoAmarelo]' // para qualquer elemento
+        selector: 'button[fundoAmarelo]' // aplicável apenas para button
+    })
+    export class FundoAmareloDirective{
+        constructor(
+            private _elementRef: ElementRef,
+            private _renderer: Renderer){
+
+            //console.log(this._elmentRef);
+            //this._elementRef.nativeElment.style.backgroundColor = 'yellow';
+            /*Para evitar ataque de cross scripting (xxs) não é recomendável
+              fazer acesso direto aos elementos do DOM usando ElementRef.
+              O ideal é utilizar a forma alternativa abaixo:*/
+            this._renderer.setElementStyle(
+                this._elementRef.nativeElement,
+                'backgroun-color',
+                'yellow');
+        }
+    }
+  ```  
+
+  Exemplo de aplicação de uma diretiva em um elemento do template do componente:
+    ```  
+    <p fundoAmarelo>
+        Texto com fundo amarelo
+    </p>
+    ```  
+
+
+
