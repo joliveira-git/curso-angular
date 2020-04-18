@@ -385,6 +385,78 @@ Instalação do lodash
  npm install --save lodash
  ```  
  
+ # Diretivas
+ Diretivas são instruções fornecidas ao template. 
+ Componentes são diretivas com template.
+ - Diretivas estruturais: usadas para modificas a estrutura do DOM. Ex.: *ngFor e *ngIf *switchCase 
+ Diretivas de atributos: interagem com o elemento em que foram aplicadas. Ex.: ng-class e ng-style 
  
- 
+ # *ngIf
+ Controla a exibição dos elementos no DOM. 
+  ```  
+*ngIg="condição" 
+  ```  
+ Exemplo:
+  ```  
+  <div *ngIf="cursos.length > 0">
+    lista os cursos aqui
+  </div>
+  ```  
+  Cuidado com performance.
+  No lugar do *ngIf podemos usar a propriedade hidden.
+  Obs: Quando a exibição está condicionada a direitos de acesso é melhor usar a diretiva *ngIg
+  ```  
+  <div [hidden]="mostrarCursos">
+    lista os cursos aqui
+  </div>
+  ```  
 
+# ngSwitch, *ngSwitchCase e *ngSwitchDefault
+  Muito útil para fazer navBar
+  ```  
+  <nav class="navbar navbar-dark bg-primary">
+    <div class="nav navbar-nav">
+        <a class="nav-item nav-link"
+            [class.ative]="aba == 'home'"
+            (click)="aba" = 'home'">Home
+        </a>
+        <a class="nav-item nav-link"
+            [class.ative]="aba == 'mapa'"
+            (click)="aba" = 'home'">Mapa
+        </a>
+        ...
+    </div>
+  </nav>
+
+  <div class="container" [ngSwitch]="aba">
+    <p *ngSwitchCase="'mapa'">Modo mapa ativado</p>
+    <p *ngSwitchCase="'lista'">Modo lista ativado</p>
+    ...
+  </div>
+  ```  
+ # *ngFor 
+  ```  
+  <ul>
+      <li *ngFor="let curso of cursos">
+          {{ curso }}
+      </li>
+  </ul>
+
+  <ul>
+      <li *ngFor="let curso of cursos, let i = index">
+          {{ i }} - {{ curso }}
+      </li>
+  </ul>
+  ```  
+  
+# Uso do *
+O asterisco o Angular irá reescrever o código utilizando a tag template.
+Exemplo:
+```  
+<div *ngIg="mostrar">
+</div>
+
+<template [ngIg]="mostrar">
+    <div>Listar aqui...</div>
+</template>
+```      
