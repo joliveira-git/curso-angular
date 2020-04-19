@@ -553,5 +553,60 @@ Exemplo:
     </p>
     ```  
 
+# HostListener e HostBinding
 
+  HostListener: Utilizado quando precisamos escutar um evento de um elemento no componente pai (hospedeiro). Fica escutando eventos no hospedeiro da diretiva.
 
+  HostBinding: Permite a associação de um atributo da diretiva para um determinado atributo do html
+
+  Código da diretiva highlight-mouse.directive.ts:
+  ```
+  import { Directive, HostListener } from '@angular/core';
+
+  @Directive({
+      selector: '[highlightMouse]'
+  })
+  export class HighlightMouseDirective{
+
+      @HostListener('mouseenter') onMouseOver(){
+          /*  O uso de um atributo da diretiva ligado a um atributo do html no 
+              hopedeiro, elimina a necessidade do código abaixo:
+          this._renderer.setElementStyle(
+              this._elementRef.nativeElement, 'background-color', 'yellow'
+          );
+          */
+
+          this.backgroudColor = 'yellow';
+      }
+
+      @HostListener('mouseleave') onMouseLeave(){
+          /*  O uso de um atributo da diretiva ligado a um atributo do html no 
+              hopedeiro, elimina a necessidade do código abaixo:
+          this._renderer.setElementStyle(
+              this._elementRef.nativeElement, 'background-color', 'yellow'
+          );
+          */
+
+          this.backgroudColor = 'white';
+      }
+
+      //@HostBinding('style.backgroundColor') backgroundColor: string;
+      @HostBinding('style.backgroundColor') get setColor(){
+          return this.backgroundColor;
+      }
+      private backgroundColor: string;
+
+      constructor(
+          /*
+          private _elementRef: ElementRef,
+          private _renderer: Renderer
+          */
+      ){}
+  }
+  ```
+  Código do componente pai (hospedeiro):
+  ```
+  <p highlightMouse>
+      Texto com highlight quando passo o mouse...
+  </p>
+  ```
