@@ -611,3 +611,112 @@ Exemplo:
   </p>
   ```
   
+# Diretiva com Input Property
+
+Template HTML do hopedeiro:
+    [highlight] é uma diretiva e tbm um input propert para a diretiva
+  ```
+    <p [highlight]="'red'" [defaultColor]="'grey'">
+        Texto com highlight com cores customizadas
+    </p>
+  ```
+.ts do componente:
+  ```
+    @Directive({
+        selector: '[highlight]'
+    })
+    export class HighlightDirective{
+
+        @HostListener('mouseenter') onMouseOver(){
+            this.backgroundColor = this.highlightColor;
+        }
+
+        @HostListener('mouseleave') onMouseLeave(){
+            this.backgroundColor = this.defaultColor;
+        }
+
+        //Binda o estilo backgroundColor do hopedeiro para ser acessado no componente.
+        @HostBinding('style.backgroundColor' backgroundColor: string;
+
+        @Input() defaultColor: string = 'white';
+        @Input('highlight') highlightColor: string = 'yellow';
+
+        constructor(){}
+
+    }
+  ```
+  
+  # Exemplo de diretiva estrutural
+  
+  TemplateRef faz referência à tag <template> e ViewContainerRef faz referência ao conteúdo da tag.
+  Nesse exemplo [ngElse] é diretiva e também um input property. A diretiva recebe um valor ou expressão booleana que deverá ser avaliada. Caso a expressão seja verdadeira, será realizada uma ação. Por isso se faz necessário transformar o input property em um método setter, como vemos abaixo:
+
+```
+  import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+
+  @Directive({
+      selector: '[ngElse]'
+  })
+  export class NgElseDirective{
+
+      @Input() set ngElse(condition: boolean){
+          if (!condition){
+              this._viewContainerRef.createEmbeddedVieew(this._templateRef);
+          }
+      }
+
+      constructor(
+          private _templateRef: TemplateRef<any>,
+          private _viewContainerRef: ViewContainerRef
+      ){ }
+
+  }
+```
+
+.HTML do componente hospedeiro:
+
+```
+  <div *ngIf="mostrarCursos">
+      Lista de cursos aqui ...
+  </div>
+  <div *ngElse="mostrarCursos">
+      Não existem cursos para serem listados ...
+  </div>
+```
+
+Desestruturando ficaria assim:
+
+```
+  <template [ngElse]="mostrarCursos">
+      <div>
+          Não existem cursos para serem listados...
+      </div>
+  </template>
+```  
+
+exemplo no github do projeto angular: 
+https://github.com/angular/angular/blob/698b0288bee60b8c5926148b79b5b93f454098db/packages/common/src/directives/ng_if.ts
+
+# Código antigo do NgIf
+Observar o uso da variável auxiliar _hasview que tem o objetivo de evitar a renderização desnecessária:
+
+```  
+  @Directive({selector: '[ngIf]'})
+  export class NgIf{
+
+      private _hasView = false;
+
+      constructor(private _viewContainer: ViewContainerRef, private _template: TemplateRef<Object>){}
+
+      @Input()
+      set ngIf(condition: any){
+          if(condition && !this._hasView){
+              this._hasView = true;
+              this._viewContainer.createEmbeddedView(this._template);
+          }else if(!condition && this._hasView){
+              this._hasView = false;
+              this._viewContainer.clear();
+          }
+      }
+  }
+```    
