@@ -3,7 +3,7 @@
 Principais Tecnologias:
 - Node.js (V8 engine Chrome)
 - TypeScript
-- Jamine / Karma
+- Jasmine / Karma
 - Protractor
 
 
@@ -771,7 +771,81 @@ Classes utilitárias
         providers: [CursosService]
     })
     ```    
+# Comunicação entre componentes usando serviços
+(broadcast de eventos)
 
+A comunicação entre componentes pai e filho se dá por meio de input property e output property. Quando não há relação entre componentes a comunicação se dá por meio de serviços
 
+cursos.service.ts:
+```    
+  @Injectable()
+  export class CursosService {
+
+      emitirCursoCriado = new EventEmitter<string>();
+  ...
+      add.Curso(curso: string){
+          this.cursos.push(curso);
+          this.emitirCursoCriado.emit(curso);
+      }
+  }
+```    
+cursos.componet.ts:
+```    
+  @Component()
+  export class CursosComponent {
+      constructor(private cursosService: CursosService);
+      ...
+      ngOnInit(){
+          this.cursos = this.cursosService.getCursos();
+
+          //Se inscreve no observable (emitter) do serivço CursosService
+          this.cursosService.emitirCursoCriado.subscribe(
+              curso => console.log(curso);        
+          );
+      }
+  }
+```    
+receber-cursos.componet.ts:
+```    
+  @Component()
+  export class ReceberCursosComponent {
+
+      constructor(private cursosService: CursosService);
+      ...
+      ngOnInit(){     
+          this.cursosService.emitirCursoCriado.subscribe(
+              curso => console.log(curso);        
+          );
+      }
+  }
+```    
+
+No exemplo acima, ambos os componentes devem estar no mesmo escopo de serviço, caso contrário, não será possível notifica-los ao mesmo tempo, pois cada construtor gera instâncias distintas do serviço.
+
+É possível realizar a comunicação entre componentes de módulos diferentes. Nesse caso, é necessário declarar o emitter como uma variável estática. Dessa forma, as várias instâncias do serviço passam a ter acesso ao mesmo emitter:
+ 
+No serviço:
+```    
+  static criouNovoCurso = new EventEmitter<string>();
+  ...
+    addCurso(curso: string){
+        ...
+        CursosService.criouNovoCurso.emit(curso); //Não acessa via this e sim via Classe
+    }
+```    
+Nos componentes:
+```    
+  construtor(private cursosService: CursosService){}
+
+    ngOnInit(){
+        this.cursos = this.cursosService.getCursos();
+
+        CursosService.criouNovoCurso.subscribe(
+            curso => console.log(curso);
+        );
+    }
+```    
+
+#
 
     
