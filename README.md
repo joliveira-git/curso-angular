@@ -720,3 +720,58 @@ Observar o uso da variável auxiliar _hasview que tem o objetivo de evitar a ren
       }
   }
 ```    
+# Serviços
+DRY (Dont Repeat Yourself): Evitar repetição de código
+
+CRUD
+Lógica de negócio deve ficar nas classes de seviço
+Classes utilitárias
+
+# Serviços
+    DRY (Dont Repeat Yourself): Evitar repetição de código
+
+    - CRUD
+    - Lógica de negócio deve ficar nas classes de seviço
+    - Classes utilitárias
+
+# Escopo de serviços e módulos
+
+  1 - Escopo: Toda aplicação (Padrão Singleton)
+    Declarar no Módulo raiz: app.module.ts
+    Haverá uma única instância do serviço disponível para toda a aplicação
+    Obs: No módulo raiz usamos BrowserModule para preparar a aplicação para rodar em um Browser.
+    ```    
+    @NgModule({
+        declarations: [],
+        imports: [],
+        providers:[CursosService]
+    })
+    ```    
+
+  2 - Escopo: Módulo
+    Declarar no módulo Módulo de Funcionalidade
+    Todos os componentes do módulo poderão instanciar o serviço.
+    Obs: No módulo de funcionalidade usamos CommonModule no lugar de BrowserModule.
+    ```    
+    @NgModule({
+        declarations: [],
+        imports: [],
+        providers:[CursosService]
+    })
+    ```    
+
+  3 - Escopo: Componente
+    Declarar o serviço no metadado providers de @Component
+    Apenas o componente poderá instanciar o serviço
+    ```    
+    @Component({
+        seletor: 'app-cursos',
+        templateUrl:'./cursos.component.html',
+        styleUrls: ['./cursos/component.css'],
+        providers: [CursosService]
+    })
+    ```    
+
+
+
+    
