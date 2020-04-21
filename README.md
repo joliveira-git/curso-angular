@@ -861,3 +861,15 @@ export class CursosService{
 }
 ```    
     
+#Pipes
+
+#Usando pipes: Parâmetros e pipes aninhados
+Exempos de pipes embutidos no Angular:
+<p>Título: {{ livro.titulo | uppercase }}</p>
+<p>Estrelas: {{ livro.rating | number:'2.1-2'}}</p>
+<p>Páginas: {{ livro.numeroPaginas | number }}</p>
+<p>Preço: {{ livro.preço | currency:'BRL':'true' }}</p>
+<p>Data Lançamento: {{ livro.dataLancamento | date:'dd-MM-yyyy' }}</p>
+<p> URL: {{ livro.url }}</p>
+<p>Livro: {{ livro | json }}</p>
+
