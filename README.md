@@ -845,7 +845,19 @@ Nos componentes:
         );
     }
 ```    
+Template Literals:
+`Criando um novo curso ${curso}`
 
-#
 
+# Injetando um serviço em outro serviço
+```    
+@Injectable()
+export class CursosService{
+    ...
+    constructor(private logService: LogService){
+        console.log('CursosService');
+
+    }
+}
+```    
     
