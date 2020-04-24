@@ -873,3 +873,181 @@ Exempos de pipes embutidos no Angular:
 <p> URL: {{ livro.url }}</p>
 <p>Livro: {{ livro | json }}</p>
 
+
+# Pipe Puro
+Não olha as modificações do valor que é passado para o parâmetro para o método transform, ou seja, se não mudarem os argumentos, o resultado será o mesmo não importando se houve alguma alteração no conteúdo do parâmetro (string, array, etc)
+No exemplo abaixo, o array livros é passado como value para o método transform do pipe que não sobre alteração, mesmo que seja incluido mais um item no array. O array passado ao pipe permanece imutável, por isso se diz que esse tipo de pipe é puro (conceito estudado na programação funcional).
+```
+ng g p filtro-array
+```
+HTML do componente:
+```
+    <input type="text" [(ngModel)]="filtro">
+    <br>
+    <input type="text" #novoValor>
+    <button (click)="addCurso(novoValor.value)">Add</button>
+
+    <lid *ngFor="let liv of livros | filtroArray:filtro">
+        {{ liv }} 
+    </li>
+```
+
+Pipe:
+```
+    import { Pipe, PipeTransform } from '@angular/core';
+
+    @Pipe({
+        name: 'filtroArray'
+    })
+    export class FiltroArrayPipe implements PipeTransform{
+
+        transform(value: any, args?: any): any{
+            if( value.length === 0 || args === undefined){
+                return value;
+            }
+            let filter = args.toLocaleLowerCase();
+            return value.filter(
+                v => v.toLocaleLowerCase().indexOf(filter) != -1
+            );
+        }
+    }
+```
+
+# Pipe Impuro
+Para tornar o pipe impuro, é necessário incluir o metadado "pure"
+
+```
+    import { Pipe, PipeTransform } from '@angular/core';
+    import { FiltroArrayPipe ) from './filtro-array.pipe';
+
+    @Pipe({
+        name: 'filtroArrayImpuro',
+        pure: false
+    })
+    export class FiltroArrayImpuroPipe extends FiltroArrayPipe {
+
+
+    }
+```
+
+* É importante dizer que a equipe do Angular não recomenda a utilização de filtros a partir de pipes. Segue abaixo a abordagem correta para resolver o problema:
+
+```
+    <li *ngFor="let liv of obterLivros()">
+        {{ liv }} 
+    </li>
+```
+
+```
+    ...
+    ObterLivros(){
+        if ( this.livros.length === 0 || 
+             this.filtro === undefined || 
+             this.filtro.trim === ''){
+            return this.livros;
+        }
+
+    }
+
+    return this.livros.filter( (v) => {
+        if (v.toLowerCase().indexOf(this.filtro.toLowerCase()) >= 0){
+            return true;
+        }
+        retunr false;
+    }
+
+```
+
+# Pipe Async
+O pipe Async é útil quando o valor que será exibido na tela é resultado de uma operação assíncrona.
+Em Angular esse valor pode ser resultante de uma Promisse ou de um Observable.
+
+Exemplo de valor sendo gerado por uma Promisse:
+```
+    valorAsync = new Promisse( (resolve, reject) => {
+        setTimeout( () => resolve('Valor assíncrono'), 2000)
+    });
+```
+
+Exempo de valor sendo gerado por um Observable:
+```
+    valorAsync = Observable.interval(2000)
+        .map(valor => 'Valor assíncrono');
+
+```
+HTML:
+```
+    <p>{{ valorAsync | async }} </p>
+
+```
+
+# Rotas
+- SPA: Single Page Application
+Exemplo de rotas:
+  /usuarios/2/edit
+  /usuarios
+  /usuarios/:id
+  /usuarios/:id/edit
+
+- Rotas Filhas: Ex: localhost:4200/contacts/1
+
+- Guardas de Rotas: 
+    - Verificar se o usuário está logado e redirecionar para a página de login
+    - Verificar se deseja sair da página quando estiver fazendo uma edição
+
+
+# Criando Rotas
+
+Pode-se declarar as rotas no app.module.ts, mas o ideal é separar em outro arquivo, criando um módulo para armazenar as rotas: 
+
+  1 - Criar o arquivo app.routing.ts:
+  ```
+      import { ModuleWithProviders } from '@angular/core';
+      import { Routes, RouterModule } from '@angular/router';
+      ...
+
+      const APP_ROUTES: Routes = [
+          { path: 'cursos', component: CursosComponent },
+          { path: 'login', component: LoginComponent }, 
+          { path: '', component: HomeComponent }
+
+      ];
+
+      export const routing: ModuleWithProviders = RouterModule.forRoot(APP_ROUTES)
+  ```
+   - A constante do tipo ModuleWithProviders contém a definição e a configuração das rotas do projeto.
+   - RouterModule.forRoot: Rotas chave ou principais
+   - RouterModule.forChild: Rotas de funcionalidade.
+
+  2 - Importar a variável "routing" do módulo app.routing.ts para o módulo principal da aplicação ( app.module.ts )
+
+  app.module.ts:
+  ```
+  import { routing } from './app.routing';
+  ...
+      @NgModule({
+          ...
+          imports:[...
+              routing
+          ]
+          ...
+      })
+  ```
+  3 - Deve-se incluir uma tag <router-outlet> em app.component.html indicando onde será feita a saída da rota. O componente da rota é renderizado dentro desta tag.
+
+  app.component.html:
+  ```
+      <router-outlet></router-outlet>
+  ```
+
+  4 - O index.html deve estar apontando para a rota raiz. È possível definir um namespace para as rotas. Ex: hRef="/app". Assim, quando acessar a rota login ficará da seguinte forma: localhost:4200/app/login
+
+  index.html:
+  ```
+      ...
+      <head>
+          <meta charset="utf-8">
+          <title></title>
+          <base href="/">
+      </head>
+  ```
