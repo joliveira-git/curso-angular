@@ -1080,7 +1080,7 @@ Ex:
 ```
 
 
-# Roteamento com parâmetros
+# Route Param - Roteamento com parâmetros
 
   1 - Criar o parâmetro na rota (cursos/:id):
   app.routing.ts:
@@ -1189,7 +1189,7 @@ O quadro abaixo tem um paraleto entre Observable e Subject
           }
       }
   ```
-  * É uma boa prática colocar uma desiscrição no ngOnDestroy
+  * É uma boa prática colocar uma descrição no ngOnDestroy
 
 
 # router.navigate: Rotas imperativas - Fazendo o redirecionamento via código
@@ -1232,4 +1232,72 @@ Exemplo: Dada uma lista de cursos, ao clicar em um curso redirecionar a rota par
           );
       }
   ```
+# queryParams - Definir e extrair parâmetros de url
+
+Útil para realizar paginação: localhost:4200/cursos?pagina=1
+
+
+
+  1 - Passando um parâmetro para a URL:
+  app.component.html:
+
+  ```
+      <div>
+          <a routerLink="">Logo aqui</a>
+          <ul id="nav-mobile">
+              <li routerLinkActive="active"><a routerLink="/cursos" [queryParams]="{pagina:1">Curso com id</a></li>
+          </ul>
+      </div>
+  ```
+
+  2 - Extraindo parâmetros da URL:
+  cursos.component.ts:
+  ```
+  import { ActivatedRoute, Router } from '@angular/router';
+  import { Subscription } from 'rxjs/Rx';
+  @Component({
+      selector: 'app-cursos',
+      templateUrl: './cursos.component.html',
+      styleUrls: ['./cursos.component.css']
+
+  })
+  export class CursosComponent implements OnInit {
+      cursos: any[];
+      pagina: number;
+      inscricao: Subscription;
+
+      constructor(
+          private cursosService: CursosService,
+          private route: ActivateRoute,
+          private router: Router // Para fazer a navegação imperativa
+      ){ }
+
+      ngOnInit(){
+          this.cursos = this.cursosService.getCursos();
+          this.inscricao = this.route.queryParams.subscribe( 
+              (queryParams: any) => {
+                  this.pagina = queryParams['pagina'];
+              }
+          )
+      }
+
+      ngOnDestroy(){
+          this.inscricao.unsubscribe();
+      }
+
+      // Navegação imperativa usando queryParams
+      proximaPagina(){
+          this.router.navigate(
+              ['/cursos'], 
+              {queryParams: {'pagina': ++this.pagina} }
+          );
+      }
+
+
+  }
+
+  ```
+  * queryParams, da mesma forma que params também é um BehaviorSubject    
+
+
 
