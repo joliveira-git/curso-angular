@@ -1051,3 +1051,144 @@ Pode-se declarar as rotas no app.module.ts, mas o ideal é separar em outro arqu
           <base href="/">
       </head>
   ```
+
+# RoterLink: Definição de rotas no código
+Ao clicar em um link a rota deve ser ativada
+
+Ex: NavBar no HTML do componente principal (app.component.html) contendo links para direcionar para diversas páginas
+
+app.component.html:
+
+<nav>
+    <div>
+        <a routerLink="">Logo: encaminha para a rota principal</a>
+        <ul>
+            <li><a routerLink="/login">Login</a></li>
+            <li><a routerLink="/cursos">Cursos</a></li>
+        </ul>
+    </div>
+</nav>
+
+# routerLinkActive: Aplicação de CSS em Rotas Ativas
+A propriedade routerLinkActive recebe uma classe CSS que deve ser aplicada quando o link da rota estiver ativo.
+
+Ex:
+```
+    <li routerLinkActive="active">
+        <a routerLink="/login">Login</a>
+    </li>
+```
+
+
+# Roteamento com parâmetros
+
+  1 - Criar o parâmetro na rota (cursos/:id):
+  app.routing.ts:
+  ```
+      import { ModuleWithProviders } from '@angular/core';
+      import { Routes, RouterModule } from '@angular/router';
+      ...
+      const APP_ROUTES: Routes = [
+          { path: 'cursos/:id', component: CursoDetalheComponent },
+          ...
+      ];
+
+      export const routing: ModuleWithProviders = RouterModule.forRoot(APP_ROUTES);
+
+  ```
+  2 - Passar o parâmetro para a rota. Isso pode ser feito de forma dinâmica via property binding: 
+      ([routerLink]="['/cursos', idCurso.value]). 
+      Nesse caso, o routerLink vai receber um array de parâmetros: 
+      o primeiro valor é o nome da rota e sem seguida são passados os parâmetros da rota.
+      
+  app.component.html:
+
+  ```
+      <div>
+          <a routerLink="">Logo aqui</a>
+          <ul id="nav-mobile">
+              <li routerLinkActive="active"><a [routerLink]="['/cursos', idCurso.value]">Curso com id</a></li>
+          </ul>
+      </div>
+  ```
+
+  3 - Obter o parâmetro no componente da rota com ActivatedRoute. (A melhor forma de fazer isso é dicutida no próximo item)
+      Isso é útil para realizar alguma ação com o parâmetro, por exemplo: exibir na tela, fazer uma consulta, etc)
+  curso-detalhe.component.ts:
+  ```
+      @Component({
+          selector: 'app-curso-detalhe',
+          templateUrl: './curso-detalhe.component.html',
+          styleUrls: ['./curso-detalhe.component.css']
+      })
+      export class CursoDetalheComponent implements OnInit {
+          id: string;
+
+          constructor( private route: ActivatedRoute ){ 
+              this.id = this.route.snapshot.params['id'];
+          }
+
+          ngOnInit(){
+
+          }
+      }
+  ```
+
+# Escutando mudanças nos parâmetros de roteamento
+ActivateRoute possui o atributo params que é do tipo BehaviorSubject (RXJS). O valor é alterado a cada mudança de rota e nós podemos nos inscrever para sermos avisados quando a mudança ocorre.
+Subject: age como Observable quando está escutando a mudança na rota e age como observer para notificar a mudança aos inscritos (substribers). A grosso modo, podemos dizer que o atributo params está sujeito ao comportamento (Behavior Subject) da rota.
+
+O quadro abaixo tem um paraleto entre Observable e Subject
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃         Observable                  ┃     BehaviorSubject/Subject         ┃      
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫ 
+┃ Is just a function, no state        ┃ Has state. Stores data in memory    ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃ Code run for each observer          ┃ Same code run                       ┃
+┃                                     ┃ only once for all observers         ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃ Creates only Observable             ┃Can create and also listen Observable┃
+┃ ( data producer alone )             ┃ ( data producer and consumer )      ┃
+┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+┃ Usage: Simple Observable with only  ┃ Usage:                              ┃
+┃ one Obeserver.                      ┃ * Store data and modify frequently  ┃
+┃                                     ┃ * Multiple observers listen to data ┃
+┃                                     ┃ * Proxy between Observable  and     ┃
+┃                                     ┃   Observer                          ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+  Obtendo os parâmetros de roteamento:
+  Para isso é necessário nos inscrevermos para ouvir as mudanças nos parametros passando a função de callback (arrow function)
+
+  curso-detalhe.component.ts:
+  ``` ...
+      import { ActivatedRoute } from '@angular/router';
+      import { Subscription } from 'rxjs/Rx';
+
+      @Component({
+          selector: 'app-curso-detalhe',
+          templateUrl: './curso-detalhe.component.html',
+          styleUrls: ['./curso-detalhe.component.css']
+      })
+      export class CursoDetalheComponent implements OnInit {
+          id: string;
+          inscricao: Subscription;
+
+          constructor( private route: ActivatedRoute ){ 
+          }
+
+          ngOnInit(){
+              this.inscricao = this.route.params.subscribe(
+                  (params: any) => { this.id = params['id']; }                
+              );
+          }
+
+          ngOnDestroy{
+              this.inscricao.unsubscribe;
+          }
+      }
+  ```
+  * É uma boa prática colocar uma desiscrição no ngOnDestroy
+
+
