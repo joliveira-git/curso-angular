@@ -1192,3 +1192,44 @@ O quadro abaixo tem um paraleto entre Observable e Subject
   * É uma boa prática colocar uma desiscrição no ngOnDestroy
 
 
+# router.navigate: Rotas imperativas - Fazendo o redirecionamento via código
+Exemplo: Dada uma lista de cursos, ao clicar em um curso redirecionar a rota para o detalhe do curso. No detalhe do curso, verificar se o  curso existe. Se sim mostra os detalhes do curso, senão redirecionar para outro componente (curso-nao-encontrado).
+
+  cursos.service.ts: vai acessar o banco de dados e retornar uma lista de cursos
+
+  cursos.compoente.html:
+  ```
+      <div>
+          <a *ngFor="let curso of cursos" [routerLink]="['/curso', curso.id]"> 
+              {{ curso.nome }} 
+          </a>
+      </div>
+  ```
+
+  cursos-detalhe.component.ts
+  ```
+      inscricao: Subscription,
+      cursos: any;
+
+      constructor(
+          private route: ActivatedRoute,
+          private router: Router,
+          private cursosService: CursosService
+      ){}
+
+      ngOnInit(){
+          this.inscricao = this.route.params.subscribe(
+              (params: any) => {
+                  this.id = params['id'];
+                  this.curso = this.cursosService.getCurso(this.id);
+
+                  // Roteamento imperativo
+                  if (this.curso == null){
+                      this.router.navigate(['/naoEncontrado']);
+
+                  }
+              }
+          );
+      }
+  ```
+
