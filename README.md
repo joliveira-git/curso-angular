@@ -1300,4 +1300,59 @@ Exemplo: Dada uma lista de cursos, ao clicar em um curso redirecionar a rota par
   * queryParams, da mesma forma que params também é um BehaviorSubject    
 
 
+# Criaçao de um módulo de rotas
+Refactoring para organizar a aplicação:
 
+Refatorar o arquivo de rotas app.routing.ts, criando o módulo app.routing.module.ts
+
+@NgModule
+export class AppRoutingMOdule{}
+ - Precisa configurar o RouterModule dentro do módulo de rotas: importa a configuração para o módulo e exporta para os demais.
+ - È necessário exportar RouterModule para que seja possível usar as diretivas routerLink e routerLinkActive
+
+  app.routing.module.ts: módulo onde ficarão as rotas raiz (principais) da aplicação:
+
+    ```
+    import { NgModule } from '@angular/core';    
+    import { ModuleWithProviders } from '@angular/core';
+    import { Routes, RouterModule } from '@angular/router';
+
+    import { HomeComponent } from './home/home.component';
+    import { LoginComponent } from './login/login.component';    
+
+    const appRoutes: Routes = [
+        { path: 'login', component: LoginComponent },
+        { path: '', component: HomeComponent },
+        ...
+    ];
+
+    @NgModule({
+        imports: [RouterModule.forRoot(appRoutes)],
+        exports: [RouterModule]
+    })
+    export class AppRoutingModule{}
+    ```
+
+  cursos.routing.module.ts: módulo de rotas de funcionalidade
+
+    ```
+    import { NgModule } from '@angular/core';
+    import { ModuleWithProviders } from '@angular/core';
+    import { Routes, RouterModule } from '@angular/router';
+
+    import { CursosComponent } from './cursos.component';
+    import { CursoDetalheComponent } from './curso-detalhe/curso-detalhe.component.ts';
+    import { CursoNaoEncontradoComponent } from './curso-nao-encontrado/curso-nao-encontrado.component.ts';
+
+    const cursosRoutes: Routes = [
+        { path: 'cursos', component: CursosComponent },
+        { path: 'curso/:id', component: CursoDetalheComponent }
+        { path: 'naoEncontrado', component: CursoNaoEncontrado }
+    ];
+
+    @NgModule({
+        imports: [RouterModule.forChild(cursoRoutes)],
+        exports: [RouterModule]
+    })
+    export class CursosRoutingModule {}
+    ```
